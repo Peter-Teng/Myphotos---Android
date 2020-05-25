@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#000000"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Activities.ImgActivity">
+
+    <com.example.photos.AdaptersAndView.ImageViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="900dp"
+        android:layout_weight="14">
+    </com.example.photos.AdaptersAndView.ImageViewPager>
+
+    <LinearLayout
+        android:id="@+id/tools"
+        android:layout_weight="1"
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:orientation="horizontal">
+        <ImageView
+            android:src="@drawable/turn"
+            android:layout_marginLeft="35dp"
+            android:id="@+id/turnImg"
+            android:layout_width="40dp"
+            android:layout_gravity="center"
+            android:layout_height="40dp">
+        </ImageView>
+
+        <ImageView
+            android:src="@drawable/paint"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="35dp"
+            android:id="@+id/paintImg"
+            android:layout_width="40dp"
+            android:layout_gravity="center"
+            android:layout_height="40dp">
+        </ImageView>
+
+        <ImageView
+            android:src="@drawable/share"
+            android:layout_marginLeft="35dp"
+            android:layout_gravity="center"
+            android:id="@+id/shareImg"
+            android:layout_width="40dp"
+            android:layout_height="40dp">
+        </ImageView>
+        <ImageView
+            android:src="@drawable/trash"
+            android:layout_marginLeft="35dp"
+            android:layout_gravity="center"
+            android:id="@+id/deleteImg"
+            android:layout_width="40dp"
+            android:layout_height="40dp">
+        </ImageView>
+        <ImageView
+            android:src="@drawable/info"
+            android:layout_marginLeft="35dp"
+            android:layout_gravity="center"
+            android:id="@+id/infomation"
+            android:layout_width="40dp"
+            android:layout_height="40dp">
+        </ImageView>
+
+    </LinearLayout>
+
+</LinearLayout>

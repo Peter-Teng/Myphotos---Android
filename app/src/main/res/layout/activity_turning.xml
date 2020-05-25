@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:orientation="vertical"
+    tools:context=".Activities.TurningActivity">
+
+    <ImageView
+        android:id="@+id/saving"
+        android:src="@drawable/save"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="350dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp">
+
+    </ImageView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/Img_turn"
+            android:layout_weight="10"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </ImageView>
+
+        <LinearLayout
+            android:background="#000000"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+            <ImageView
+                android:id="@+id/left"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="100dp"
+                android:layout_gravity="center"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/left_turn">
+            </ImageView>
+            <ImageView
+                android:id="@+id/right"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="120dp"
+                android:layout_gravity="center"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/right_turn">
+            </ImageView>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>
