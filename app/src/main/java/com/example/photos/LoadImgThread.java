@@ -50,11 +50,6 @@ public class LoadImgThread extends Thread
                         }
                         tmp.clear();
                         i = 0;
-                        try {
-                            sleep(100);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
                     }
                 }
             });
