@@ -21,6 +21,8 @@ import com.example.photos.FileUtils;
 import com.example.photos.LoadImgThread;
 import com.example.photos.R;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -50,8 +52,13 @@ public class MainActivity extends AppCompatActivity {
         FileUtils.picture(MainActivity.this.getContentResolver());
         grids = findViewById(R.id.recyclerView);
         ArrayList<Bitmap> thumbnails = new ArrayList<>();
-        for (int i = 0; i < 10 && i < FileUtils.images.size(); i++)
-            thumbnails.add(FileUtils.generateThumbnails(i));
+        for (int i = 0; i < 10 && i < FileUtils.images.size(); i++) {
+            try {
+                thumbnails.add(FileUtils.generateThumbnails(i));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         adapter = new ImgAdapter(MainActivity.this, thumbnails);
         GridLayoutManager manager = new GridLayoutManager(MainActivity.this, 3);
         adapter.setOnItemClickListener(new ImgAdapter.OnItemClickListener() {

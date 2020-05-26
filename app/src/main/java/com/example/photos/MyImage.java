@@ -5,13 +5,23 @@ import java.util.Date;
 public class MyImage
 {
     private String path;
-    private Date dateModified;
+    private Date dateAdded;
     private String displayName;
+    private long id;
 
-    public MyImage(String path, Date dateModified, String displayName) {
+    public MyImage(long id,String path, Date dateModified, String displayName) {
+        this.id = id;
         this.path = path;
-        this.dateModified = dateModified;
+        this.dateAdded = dateModified;
         this.displayName = displayName;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getPath() {
@@ -22,12 +32,12 @@ public class MyImage
         this.path = path;
     }
 
-    public Date getDateModified() {
-        return dateModified;
+    public Date getDateAdded() {
+        return dateAdded;
     }
 
-    public void setDateModified(Date dateModified) {
-        this.dateModified = dateModified;
+    public void setDateAdded(Date dateAdded) {
+        this.dateAdded = dateAdded;
     }
 
     public String getDisplayName() {

@@ -96,7 +96,7 @@ public class ImgActivity extends AppCompatActivity {
                 StringBuilder sb = new StringBuilder();
                 String name = image.getDisplayName();
                 String path = image.getPath();
-                Date date = image.getDateModified();
+                Date date = image.getDateAdded();
                 sb.append("照片名字：  " + name + "\n\n照片路径：  " + path + "\n\n照片日期：  " + date.toString());
                 alert.setMessage(sb.toString());
                 alert.setTitle("照片信息：");

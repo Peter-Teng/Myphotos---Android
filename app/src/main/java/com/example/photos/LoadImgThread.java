@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 
 import com.example.photos.Activities.MainActivity;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -31,7 +33,12 @@ public class LoadImgThread extends Thread
             {
                 for (;i < 10 && all > (i + index); i++)
                 {
-                    Bitmap bitmap = FileUtils.generateThumbnails(index + i);
+                    Bitmap bitmap = null;
+                    try {
+                        bitmap = FileUtils.generateThumbnails(index + i);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     tmp.add(bitmap);
                 }
                 j = 0;
