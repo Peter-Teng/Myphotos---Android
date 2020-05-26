@@ -55,6 +55,7 @@ public class DoodleView extends androidx.appcompat.widget.AppCompatImageView
                 float moveX = event.getX();
                 float moveY = event.getY();
                 canvas.drawLine(downX,downY,moveX,moveY,paint);
+                System.out.println(event.getY()+"\nRawY: "+event.getRawY());
                 downX = moveX;
                 downY = moveY;
                 this.setImageBitmap(cacheBitmap);

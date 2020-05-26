@@ -11,7 +11,8 @@
     <ImageView
         android:id="@+id/savingDoodle"
         android:src="@drawable/save"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="350dp"
         android:layout_width="20dp"
         android:layout_height="20dp">
@@ -19,10 +20,12 @@
     </ImageView>
 
     <com.example.photos.AdaptersAndView.DoodleView
+        android:layout_gravity="center"
         android:id="@+id/Img_Doodle"
         android:layout_weight="10"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:scaleType="matrix"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
     </com.example.photos.AdaptersAndView.DoodleView>
 
 
