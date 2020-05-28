@@ -29,6 +29,8 @@ public class LoadImgThread extends Thread
     {
         for(;index < all;)
         {
+            if(FileUtils.numberLoaded >= FileUtils.maxLoad)
+                break;
             synchronized (lock)
             {
                 for (;i < 10 && all > (i + index); i++)
