@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class LoadImgThread extends Thread
 {
     private MainActivity aty;
-    public static int index = 50;
+    public static int index = 30;
     private int all = FileUtils.images.size();
     private ArrayList<Bitmap> tmp = new ArrayList<>();
     private int i = 0;
