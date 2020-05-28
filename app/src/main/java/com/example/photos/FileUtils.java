@@ -28,8 +28,6 @@ import java.util.concurrent.TimeUnit;
 
 public class FileUtils
 {
-    public static int numberLoaded = 0;
-    public static int maxLoad = 500;
     public static ArrayList<MyImage> images = new ArrayList<MyImage>();
     private  static String[] projection = {MediaStore.Images.Media._ID, MediaStore.Images.Media.DATE_ADDED,
             MediaStore.Images.Media.DATA, MediaStore.Images.Media.DISPLAY_NAME};
@@ -62,8 +60,6 @@ public class FileUtils
     }
 
     public static Bitmap generateThumbnails(int i) throws IOException {
-        if(numberLoaded >= maxLoad)
-            return null;
         MyImage myImage = FileUtils.images.get(i);
         String path = myImage.getId() + "$" + myImage.getDisplayName();
         try {
@@ -90,7 +86,6 @@ public class FileUtils
             outputStream.write(byteArrayOutputStream.toByteArray());
             byteArrayOutputStream.close();
             outputStream.close();
-            numberLoaded++;
             return bitmap;
         }
         return null;

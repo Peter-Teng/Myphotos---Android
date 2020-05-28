@@ -1,6 +1,7 @@
 package com.example.photos.Activities;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -12,8 +13,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.photos.AdaptersAndView.ImgAdapter;
@@ -33,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
     public ImgAdapter adapter = null;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-    private boolean loaded = false;
     private long millisec = -1;
 
     public static void verifyStoragePermissions(Activity activity) {
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -52,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         FileUtils.picture(MainActivity.this.getContentResolver());
         grids = findViewById(R.id.recyclerView);
         ArrayList<Bitmap> thumbnails = new ArrayList<>();
-        for (int i = 0; i < 10 && i < FileUtils.images.size(); i++) {
+        for (int i = 0; i < 30 && i < FileUtils.images.size(); i++) {
             try {
                 thumbnails.add(FileUtils.generateThumbnails(i));
             } catch (IOException e) {
@@ -71,12 +74,18 @@ public class MainActivity extends AppCompatActivity {
         });
         grids.setAdapter(adapter);
         grids.setLayoutManager(manager);
-        if(!loaded)
-        {
-            loaded = true;
-            LoadImgThread loadImgThread = new LoadImgThread(MainActivity.this);
-            loadImgThread.start();
-        }
+
+
+        grids.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY)
+            {
+                if(!grids.canScrollVertically(1) && LoadImgThread.index < FileUtils.images.size()) {
+                    LoadImgThread loadImgThread = new LoadImgThread(MainActivity.this);
+                    loadImgThread.start();
+                }
+            }
+        });
     }
 
     @Override

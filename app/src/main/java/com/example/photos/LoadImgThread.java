@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 
 import com.example.photos.Activities.MainActivity;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -12,7 +11,7 @@ import java.util.ArrayList;
 public class LoadImgThread extends Thread
 {
     private MainActivity aty;
-    private int index = 10;
+    public static int index = 50;
     private int all = FileUtils.images.size();
     private ArrayList<Bitmap> tmp = new ArrayList<>();
     private int i = 0;
@@ -27,41 +26,36 @@ public class LoadImgThread extends Thread
     @Override
     public void run()
     {
-        for(;index < all;)
+        synchronized (lock)
         {
-            if(FileUtils.numberLoaded >= FileUtils.maxLoad)
-                break;
-            synchronized (lock)
+            for (;i < 30 && all > (i + index); i++)
             {
-                for (;i < 10 && all > (i + index); i++)
-                {
-                    Bitmap bitmap = null;
-                    try {
-                        bitmap = FileUtils.generateThumbnails(index + i);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    tmp.add(bitmap);
+                Bitmap bitmap = null;
+                try {
+                    bitmap = FileUtils.generateThumbnails(index + i);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                j = 0;
+                tmp.add(bitmap);
             }
-            aty.runOnUiThread(new Runnable()
-            {
-                @Override
-                public void run() {
-                    synchronized (lock)
-                    {
-                        for (;j < tmp.size(); j++)
-                        {
-                            aty.adapter.insertBitmap(tmp.get(j));
-                            aty.adapter.notifyItemInserted(index);
-                            index++;
-                        }
-                        tmp.clear();
-                        i = 0;
-                    }
-                }
-            });
+            j = 0;
         }
+        aty.runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run() {
+                synchronized (lock)
+                {
+                    for (;j < tmp.size(); j++)
+                    {
+                        aty.adapter.insertBitmap(tmp.get(j));
+                        aty.adapter.notifyItemInserted(index);
+                        index++;
+                    }
+                    tmp.clear();
+                    i = 0;
+                }
+            }
+        });
     }
 }
