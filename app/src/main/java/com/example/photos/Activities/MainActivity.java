@@ -1,5 +1,10 @@
 package com.example.photos.Activities;
 
+
+/**
+ * @author DHP
+ *
+ */
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,11 +37,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-
+//显示图片缩略图以及recyclerView的主要Aty
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView grids = null;
     public ImgAdapter adapter = null;
+
+    //访存权限相关
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {Manifest.permission.READ_EXTERNAL_STORAGE,
                                                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -54,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
 //    接收广播udp报文设置
     private WifiManager.MulticastLock lock;
 
+    //获取用户权限
     public static void verifyStoragePermissions(Activity activity) {
         int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (permission != PackageManager.PERMISSION_GRANTED) {
@@ -67,10 +75,14 @@ public class MainActivity extends AppCompatActivity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //获取用户权限
         verifyStoragePermissions(MainActivity.this);
         FileUtils.picture(MainActivity.this.getContentResolver());
+
+        //初始化recyclerView
         grids = findViewById(R.id.recyclerView);
         ArrayList<Bitmap> thumbnails = new ArrayList<>();
+        //开始先load30张图片，免得加载太多造成系统卡顿
         for (int i = 0; i < 30 && i < FileUtils.images.size(); i++) {
             try {
                 thumbnails.add(FileUtils.generateThumbnails(i));
@@ -78,13 +90,17 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+
+        //为recyclerView初始化adapter，布局以及设置点击事件监听
         adapter = new ImgAdapter(MainActivity.this, thumbnails);
         GridLayoutManager manager = new GridLayoutManager(MainActivity.this, 3);
+
+        //点击图片缩略图，进入图片大图Aty
         adapter.setOnItemClickListener(new ImgAdapter.OnItemClickListener() {
             @Override
             public void onClick(int position) {
                 Intent intent = new Intent(MainActivity.this, ImgActivity.class);
-                intent.putExtra("pos", position);
+                intent.putExtra("pos", position);//设置Intent，告知是哪张图片被点击了
                 startActivityForResult(intent,0);
             }
         });
@@ -92,10 +108,12 @@ public class MainActivity extends AppCompatActivity {
         grids.setLayoutManager(manager);
 
 
+        //设置滑动事件监听
         grids.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY)
             {
+                //当recyclerView被滑动到底部时，采用一个新的线程来load 30张图片
                 if(!grids.canScrollVertically(1) && LoadImgThread.index < FileUtils.images.size()) {
                     LoadImgThread loadImgThread = new LoadImgThread(MainActivity.this);
                     loadImgThread.start();
@@ -119,20 +137,23 @@ public class MainActivity extends AppCompatActivity {
         new Thread(tcpReciver).start();
     }
 
+    //这里接收ImageActivity结束传回来的参数
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
     {
         switch(resultCode)
         {
+            //假如有图片被删除，code为1
             case 1:
-                int pos = data.getIntExtra("pos",-1);
+                int pos = data.getIntExtra("pos",-1);//获取要删除的图片的index
                 if(pos != -1)
                 {
                     //Toast.makeText(MainActivity.this,"您正在尝试删除第"+pos+"张图片",Toast.LENGTH_SHORT).show();
-                    adapter.deleteBitmap(pos);
+                    adapter.deleteBitmap(pos);//实际删除这个图片
                     FileUtils.deleteBitmap(getContentResolver(),pos);
-                    adapter.notifyItemRemoved(pos);
+                    adapter.notifyItemRemoved(pos);//在recyclerView中删除这个图片
                 }
+                break;
         }
     }
 

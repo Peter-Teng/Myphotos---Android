@@ -2,6 +2,13 @@ package com.example.photos;
 
 import java.util.Date;
 
+/**
+ * @author DHP
+ * @date 2020-05-22 08:40
+ */
+
+//图片相关的实体POJO类，记录了一幅图片的路径，创建时间，名称以及id
+//每一幅在手机里的图片都相当于一个MyImage对象
 public class MyImage
 {
     private String path;
