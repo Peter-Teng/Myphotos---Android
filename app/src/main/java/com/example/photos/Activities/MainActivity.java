@@ -10,9 +10,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -22,9 +24,10 @@ import android.widget.Toast;
 import com.example.photos.AdaptersAndView.ImgAdapter;
 import com.example.photos.FileUtils;
 import com.example.photos.LoadImgThread;
+import com.example.photos.NetWorking.tcp.receiver.TcpReciver;
+import com.example.photos.NetWorking.udp.recevier.impl.DeviceWaitingFinder;
 import com.example.photos.R;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -35,8 +38,21 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView grids = null;
     public ImgAdapter adapter = null;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private static String[] PERMISSIONS_STORAGE = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    private static String[] PERMISSIONS_STORAGE = {Manifest.permission.READ_EXTERNAL_STORAGE,
+                                                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                                    Manifest.permission.INTERNET};//新增网络请求连接
     private long millisec = -1;
+
+    //局域网设备搜索服务
+    private DeviceWaitingFinder deviceWaitingFinder;//在局域网中上线，为同一局域网内其他设备提供响应服务
+    private static final int DEVICE_RESP_PORT = 9999;//局域网响应服务端口
+
+    //文件接收服务
+    private TcpReciver tcpReciver;//监听文件传输服务
+    private static final int RECV_PORT = 8888;//文件传输监听端口
+
+//    接收广播udp报文设置
+    private WifiManager.MulticastLock lock;
 
     public static void verifyStoragePermissions(Activity activity) {
         int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -86,6 +102,21 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+//        开启接收广播udp报文设置
+        WifiManager wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        lock= wifiManager.createMulticastLock("localWifi");
+        lock.acquire();//在destroy方法中记得释放锁
+
+        //创建局域网响应服务线程
+        deviceWaitingFinder = new DeviceWaitingFinder("Tester", DEVICE_RESP_PORT, MainActivity.this);
+        //服务启动
+        deviceWaitingFinder.start();
+
+        //创建文件接收服务线程
+        tcpReciver = new TcpReciver(RECV_PORT, "", MainActivity.this);
+        //启动线程(注：暂未确定线程适用策略，没有线程池服务，暂时先直接创建匿名线程开启服务)
+        new Thread(tcpReciver).start();
     }
 
     @Override
@@ -131,5 +162,11 @@ public class MainActivity extends AppCompatActivity {
             finish();
             System.exit(0);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        lock.release();
     }
 }

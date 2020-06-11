@@ -59,6 +59,7 @@ public class ImgActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
+
                 Toast.makeText(ImgActivity.this,"这是图像分享功能",Toast.LENGTH_SHORT).show();
             }
         });
