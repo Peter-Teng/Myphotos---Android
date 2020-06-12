@@ -75,7 +75,9 @@ public class ImgActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-
+                Intent intent = new Intent(ImgActivity.this, DeviceActivity.class);//启动设备列表活动
+                intent.putExtra("pos",viewPager.getCurrentItem());//设置intent，告知该ATY应该获取哪张图片
+                startActivity(intent);
                 Toast.makeText(ImgActivity.this,"这是图像分享功能",Toast.LENGTH_SHORT).show();
             }
         });

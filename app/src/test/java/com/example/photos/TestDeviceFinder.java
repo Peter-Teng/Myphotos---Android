@@ -52,7 +52,7 @@ public class TestDeviceFinder {
      */
     @Test
     public void startFinder(){
-        DeviceFinder deviceFinder = new DeviceFinder(9999);
+        DeviceFinder deviceFinder = new DeviceFinder(9999,null);
         deviceFinder.start();
         //用于在测试代码中阻塞线程
         sc.nextInt();

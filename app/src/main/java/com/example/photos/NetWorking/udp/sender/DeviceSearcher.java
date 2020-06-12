@@ -1,24 +1,22 @@
 package com.example.photos.NetWorking.udp.sender;
 
 
-import com.example.photos.NetWorking.utils.NetworkUtils;
+
+import android.util.Log;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.Inet4Address;
+
 import java.net.InetAddress;
-import java.net.NetworkInterface;
 import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
 import java.nio.charset.Charset;
-import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
 
 
 public abstract class DeviceSearcher extends Thread {
-    private static final String TAG = DeviceSearcher.class.getSimpleName();
+    private static final String TAG = "DeviceSearcher";
 
     private static final int DEVICE_FIND_PORT = 9000;
 
@@ -92,7 +90,7 @@ public abstract class DeviceSearcher extends Thread {
                         if (recePack.getLength() > 0) {
                             mDeviceIP = recePack.getAddress().getHostAddress();
                             if (parsePack(recePack)) {
-                                System.out.println(TAG+ "：设备上线：" + mDeviceIP);
+                                Log.i(TAG, "设备上线:"+mDeviceIP);
                                 // 发送一对一的确认信息。使用接收报，因为接收报中有对方的实际IP，发送报时广播IP
                                 mPackType = PACKET_TYPE_FIND_DEVICE_CHK_12;
                                 recePack.setData(packData(rspCount)); // 注意：设置数据的同时，把recePack.getLength()也改变了
@@ -102,7 +100,7 @@ public abstract class DeviceSearcher extends Thread {
                     }
                 } catch (SocketTimeoutException e) {
                 }
-                System.out.println(TAG+": 结束搜索" + i);
+                Log.i(TAG, "结束搜索");
             }
             onSearchFinish(mDeviceSet);
         } catch (IOException e) {

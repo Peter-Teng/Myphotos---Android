@@ -52,11 +52,11 @@ public class MainActivity extends AppCompatActivity {
 
     //局域网设备搜索服务
     private DeviceWaitingFinder deviceWaitingFinder;//在局域网中上线，为同一局域网内其他设备提供响应服务
-    private static final int DEVICE_RESP_PORT = 9999;//局域网响应服务端口
+    public static final int DEVICE_RESP_PORT = 9999;//局域网响应服务端口
 
     //文件接收服务
     private TcpReciver tcpReciver;//监听文件传输服务
-    private static final int RECV_PORT = 8888;//文件传输监听端口
+    public static final int RECV_PORT = 8888;//文件传输监听端口
 
 //    接收广播udp报文设置
     private WifiManager.MulticastLock lock;

@@ -3,9 +3,44 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:id="@+id/finding_symbol"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="搜索设备中..."
+            android:textSize="25dp"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/progress_text"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_vertical"
+        android:text="查无设备"
+        android:textSize="25dp"
+        android:visibility="gone"
+        android:id="@+id/find_none_text"/>
+
+
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/device_list"/>
+        android:layout_height="match_parent"
+        android:id="@+id/device_list" />
 
 </LinearLayout>
