@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     //文件接收服务
     private TcpReciver tcpReciver;//监听文件传输服务
     public static final int RECV_PORT = 8888;//文件传输监听端口
+    public static final String RECV_FILE_PATH = "/storage/emulated/0/Pictures/";//文件接收路径
 
 //    接收广播udp报文设置
     private WifiManager.MulticastLock lock;
@@ -132,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         deviceWaitingFinder.start();
 
         //创建文件接收服务线程
-        tcpReciver = new TcpReciver(RECV_PORT, "", MainActivity.this);
+        tcpReciver = new TcpReciver(RECV_PORT, RECV_FILE_PATH, MainActivity.this);
         //启动线程(注：暂未确定线程适用策略，没有线程池服务，暂时先直接创建匿名线程开启服务)
         new Thread(tcpReciver).start();
     }

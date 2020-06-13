@@ -64,9 +64,9 @@ public class DeviceActivity extends AppCompatActivity {
             }
         });
 
-        initBeanList();
+//        initBeanList();
         DeviceFinder deviceFinder = new DeviceFinder(MainActivity.DEVICE_RESP_PORT, DeviceActivity.this);
-//        deviceFinder.start();
+        deviceFinder.start();
 //        进度显示
         progress_symbol = findViewById(R.id.finding_symbol);
     }
@@ -124,7 +124,7 @@ public class DeviceActivity extends AppCompatActivity {
     public void transferringFile(){
         progress_symbol.setVisibility(View.VISIBLE);//显示进度条
         TextView textView = findViewById(R.id.progress_text);
-        textView.setText("传输图片中。。。");
+        textView.setText("传输图片中...");
         device_list.setVisibility(View.GONE);//列表不可见
     }
 
@@ -134,7 +134,7 @@ public class DeviceActivity extends AppCompatActivity {
     public void startFinding(){
         progress_symbol.setVisibility(View.VISIBLE);//显示进度条
         TextView textView = findViewById(R.id.progress_text);
-        textView.setText("搜索设备中。。。");
+        textView.setText("搜索设备中...");
         device_list.setVisibility(View.GONE);//列表不可见
     }
 
@@ -154,12 +154,10 @@ public class DeviceActivity extends AppCompatActivity {
 
     //增加设备，用于UI测试
     private void initBeanList(){
-        for(int i=0;i<5;i++) {
             DeviceSearcher.DeviceBean bean = new DeviceSearcher.DeviceBean();
             bean.setName("Honor");
+            bean.setIp("192.168.56.1");
             deviceBeanList.add(bean);
-        }
-
     }
 
     //增加设备集

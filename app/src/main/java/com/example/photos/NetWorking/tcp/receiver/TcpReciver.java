@@ -33,9 +33,9 @@ public class TcpReciver implements Runnable{
     @Override
     public void run() {
         ServerSocket ss = null;
-        Looper.prepare();//通过子线程调用UI处理方法需要先经过此步骤，具体用法及原因尚待探索
-        Toast.makeText(context, "文件接收监听服务启动", Toast.LENGTH_SHORT).show();
-        Looper.loop();// 进入loop中的循环，查看消息队列
+//        Looper.prepare();//通过子线程调用UI处理方法需要先经过此步骤，具体用法及原因尚待探索
+//        Toast.makeText(context, "文件接收监听服务启动", Toast.LENGTH_SHORT).show();
+//        Looper.loop();// 进入loop中的循环，查看消息队列
         try {
             ss = new ServerSocket(port);
         } catch (IOException e) {

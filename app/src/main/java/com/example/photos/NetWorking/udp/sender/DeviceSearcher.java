@@ -90,7 +90,8 @@ public abstract class DeviceSearcher extends Thread {
                         if (recePack.getLength() > 0) {
                             mDeviceIP = recePack.getAddress().getHostAddress();
                             if (parsePack(recePack)) {
-                                Log.i(TAG, "设备上线:"+mDeviceIP);
+                                System.out.println(TAG+":设备上线："+mDeviceIP);
+//                                Log.i(TAG, "设备上线:"+mDeviceIP);
                                 // 发送一对一的确认信息。使用接收报，因为接收报中有对方的实际IP，发送报时广播IP
                                 mPackType = PACKET_TYPE_FIND_DEVICE_CHK_12;
                                 recePack.setData(packData(rspCount)); // 注意：设置数据的同时，把recePack.getLength()也改变了
@@ -100,7 +101,7 @@ public abstract class DeviceSearcher extends Thread {
                     }
                 } catch (SocketTimeoutException e) {
                 }
-                Log.i(TAG, "结束搜索");
+//                Log.i(TAG, "结束搜索");
             }
             onSearchFinish(mDeviceSet);
         } catch (IOException e) {
