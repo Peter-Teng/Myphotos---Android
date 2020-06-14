@@ -60,10 +60,10 @@ public class TestDeviceFinder {
 
     @Test
     public void getHostIPTest(){
-//        String curDeviceIp = NetworkUtils.getInet4Address().getHostAddress();
-//        String broadcastIp = curDeviceIp.substring(0,curDeviceIp.lastIndexOf(".")+1)+"255";
-//        System.out.println(broadcastIp);
-        System.out.println(getIPs());
+        String curDeviceIp = NetworkUtils.getInet4Address().getHostAddress();
+        String broadcastIp = curDeviceIp.substring(0,curDeviceIp.lastIndexOf(".")+1)+"255";
+        System.out.println(broadcastIp);
+//        System.out.println(getIPs());
     }
 
     public List<String> getIPs()

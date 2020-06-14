@@ -3,8 +3,11 @@ package com.example.photos.NetWorking.tcp.receiver;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Looper;
 import android.widget.Toast;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,6 +46,8 @@ public class FileReciver implements Runnable{
     @Override
     public void run() {
         OutputStream out = null;
+        DataOutputStream dos = null;
+        DataInputStream dis = null;
         try{
             InputStream in = socket.getInputStream();
             /**
@@ -87,23 +92,49 @@ public class FileReciver implements Runnable{
             System.out.println("文件长度"+len2);
             // 创建输文件出流，指定文件输出地址
             out = new FileOutputStream(fileStorePath+fileName);
+            dis = new DataInputStream(in);
+            dos = new DataOutputStream(out);
             // 获取文件内容字节
             // 流对接
-            byte[] by3 = new byte[len2];
-            while(in.read(by3,0,by3.length)!=-1) {
-                ;
+            byte[] buf = new byte[len2];
+            int len = 0;
+
+            while ((len = dis.read(buf)) != -1) {
+                dos.write(buf, 0, len);
             }
-            out.write(by3);
+            dos.flush();
 //            展示读取结果
-            if (ifInform)
-                Toast.makeText(context,"接收到图片"+fileName+"并保存到"+fileStorePath,
+            if (ifInform) {
+                Looper.prepare();
+                Toast.makeText(context, "接收到图片" + fileName + "并保存到" + fileStorePath,
                         Toast.LENGTH_SHORT).show();
+                Looper.loop();
+            }
             System.out.println("接受到来自"+socket.getInetAddress().getHostAddress()+"的文件,存放于："+fileStorePath+fileName);
 
         } catch (IOException e) {
             e.printStackTrace();
         }finally {
             // 关闭资源
+            try {
+                if(dis != null) {
+                    dis.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }finally {
+                dis = null;
+            }
+            try {
+                if(dos != null) {
+                    dos.flush();
+                    dos.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }finally {
+                dos = null;
+            }
             // 关闭输出流
             try {
                 if(out != null) {

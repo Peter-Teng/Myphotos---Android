@@ -4,6 +4,8 @@ package com.example.photos.NetWorking.udp.sender;
 
 import android.util.Log;
 
+import com.example.photos.NetWorking.utils.NetworkUtils;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -69,6 +71,9 @@ public abstract class DeviceSearcher extends Thread {
 
             byte[] sendData = new byte[1024];
 
+//            String curDeviceIp = NetworkUtils.getInet4Address().getHostAddress();
+//            String broadcastIp = curDeviceIp.substring(0,curDeviceIp.lastIndexOf(".")+1)+"255";
+//            InetAddress broadIP = InetAddress.getByName(broadcastIp);
             InetAddress broadIP = InetAddress.getByName("255.255.255.255");
             DatagramPacket sendPack = new DatagramPacket(sendData, sendData.length, broadIP, port);
 

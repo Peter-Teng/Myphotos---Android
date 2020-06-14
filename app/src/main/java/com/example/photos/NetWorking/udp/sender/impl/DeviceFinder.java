@@ -32,12 +32,14 @@ public class DeviceFinder extends DeviceSearcher {
     @Override
     public void onSearchStart() {
         //用于在UI上展示正在搜索
-        context.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                context.startFinding();
-            }
-        });
+        if (context != null) {
+            context.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    context.startFinding();
+                }
+            });
+        }
 
     }
     /**
@@ -51,14 +53,15 @@ public class DeviceFinder extends DeviceSearcher {
         mDeviceList.clear();
         mDeviceList.addAll(deviceSet);
         // 在UI上更新设备列表
-        context.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                context.finishFinding(!deviceSet.isEmpty());
-            }
-        });
-
-        context.addDeviceAll(mDeviceList);
+        if (context != null) {
+            context.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    context.finishFinding(!deviceSet.isEmpty());
+                }
+            });
+            context.addDeviceAll(mDeviceList);
+        }
     }
 
 }

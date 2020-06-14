@@ -92,16 +92,27 @@ public class DeviceActivity extends AppCompatActivity {
                             TcpSender sender = new TcpSender();
                             sender.sendFile(path, deviceBeanList.get(pos).getIp(), MainActivity.RECV_PORT);
 //                            显示结果
-                            Looper.prepare();
-                            Toast.makeText(DeviceActivity.this, "传输成功", Toast.LENGTH_SHORT).show();
-                            Looper.loop();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(DeviceActivity.this, "传输成功", Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         }catch (Exception e){
                             e.printStackTrace();
-                            Looper.prepare();
-                            Toast.makeText(DeviceActivity.this, "传输失败", Toast.LENGTH_SHORT).show();
-                            Looper.loop();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(DeviceActivity.this, "传输失败", Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         }finally {
-                            finishFinding(true);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    finishFinding(true);
+                                }
+                            });
                         }
                     }
                 }).start();

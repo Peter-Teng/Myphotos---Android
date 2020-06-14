@@ -11,6 +11,8 @@ import java.util.Scanner;
  */
 public class TcpSender {
 
+    public static final int SEND_SIZE = 2<<20;//文件传输缓冲区大小
+
     public void sendFile(String filePath , String host,int port)  {
         Scanner scan = null;
         InputStream in = null;
@@ -37,7 +39,7 @@ public class TcpSender {
                 // 向服务器发送[文件字节长度\r\n]
                 out.write((file.length() + "\r\n").getBytes());
                 // 发送[文件字节内容]
-                byte[] data = new byte[1020];
+                byte[] data = new byte[SEND_SIZE];
                 int i = 0;
                 while((i = in.read(data)) != -1) {
                     out.write(data, 0, i);
