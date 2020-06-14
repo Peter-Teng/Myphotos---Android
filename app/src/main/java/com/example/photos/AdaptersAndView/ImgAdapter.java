@@ -17,6 +17,7 @@ import com.example.photos.R;
 
 import java.util.ArrayList;
 
+//recyclerView对应的adapter
 public class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.myViewHolder>
 {
     private Context context;
@@ -27,11 +28,13 @@ public class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.myViewHolder>
         void onClick(int position);
     }
 
+    //插入图片
     public void insertBitmap(Bitmap bitmap)
     {
         imgs.add(bitmap);
     }
 
+    //删除图片
     public void deleteBitmap(int pos) {imgs.remove(pos);}
 
     private OnItemClickListener listener;
@@ -40,6 +43,7 @@ public class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.myViewHolder>
         this.listener = listener;
     }
 
+    //构造函数
     public ImgAdapter(Context c,ArrayList<Bitmap> i)
     {
         this.context = c;

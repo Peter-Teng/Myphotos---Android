@@ -1,7 +1,7 @@
 package com.example.photos;
 
 /**
- * @author DHP
+ * @author DHP，TYD
  *
  */
 import android.graphics.Bitmap;

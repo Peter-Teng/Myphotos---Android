@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView grids = null;
     public ImgAdapter adapter = null;
+    private int deleted = 0;//记录当前删除了多少张照片，以免传pos的时候错位
+
 
     //访存权限相关
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -101,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(int position) {
                 Intent intent = new Intent(MainActivity.this, ImgActivity.class);
-                intent.putExtra("pos", position);//设置Intent，告知是哪张图片被点击了
+                intent.putExtra("pos", position - deleted);//设置Intent，告知是哪张图片被点击了
                 startActivityForResult(intent,0);
             }
         });
@@ -150,9 +152,10 @@ public class MainActivity extends AppCompatActivity {
                 if(pos != -1)
                 {
                     //Toast.makeText(MainActivity.this,"您正在尝试删除第"+pos+"张图片",Toast.LENGTH_SHORT).show();
-                    adapter.deleteBitmap(pos);//实际删除这个图片
-                    FileUtils.deleteBitmap(getContentResolver(),pos);
+                    adapter.deleteBitmap(pos);//从adapter中移除图片
+                    FileUtils.deleteBitmap(getContentResolver(),pos);//实际删除这个图片
                     adapter.notifyItemRemoved(pos);//在recyclerView中删除这个图片
+                    deleted++;
                 }
                 break;
         }
