@@ -24,46 +24,46 @@
         android:orientation="horizontal">
         <ImageView
             android:src="@drawable/turn"
-            android:layout_marginLeft="35dp"
             android:id="@+id/turnImg"
             android:layout_width="40dp"
             android:layout_gravity="center"
-            android:layout_height="40dp">
+            android:layout_height="40dp"
+            android:layout_weight="1">
         </ImageView>
 
         <ImageView
             android:src="@drawable/paint"
             android:layout_marginBottom="3dp"
-            android:layout_marginLeft="35dp"
             android:id="@+id/paintImg"
             android:layout_width="40dp"
             android:layout_gravity="center"
-            android:layout_height="40dp">
+            android:layout_height="40dp"
+            android:layout_weight="1">
         </ImageView>
 
         <ImageView
             android:src="@drawable/share"
-            android:layout_marginLeft="35dp"
             android:layout_gravity="center"
             android:id="@+id/shareImg"
             android:layout_width="40dp"
-            android:layout_height="40dp">
+            android:layout_height="40dp"
+            android:layout_weight="1">
         </ImageView>
         <ImageView
             android:src="@drawable/trash"
-            android:layout_marginLeft="35dp"
             android:layout_gravity="center"
             android:id="@+id/deleteImg"
             android:layout_width="40dp"
-            android:layout_height="40dp">
+            android:layout_height="40dp"
+            android:layout_weight="1">
         </ImageView>
         <ImageView
             android:src="@drawable/info"
-            android:layout_marginLeft="35dp"
             android:layout_gravity="center"
             android:id="@+id/infomation"
             android:layout_width="40dp"
-            android:layout_height="40dp">
+            android:layout_height="40dp"
+            android:layout_weight="1">
         </ImageView>
 
     </LinearLayout>

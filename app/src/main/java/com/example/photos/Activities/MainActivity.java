@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 
 import android.Manifest;
@@ -19,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -68,8 +70,10 @@ public class MainActivity extends AppCompatActivity {
 //      线程池
     private static final int POOL_SIZE = 5;//线程池数量
     private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(POOL_SIZE);
-
+//      获取设备品牌及型号作为设备名称
     private static final String DEVICE_NAME = android.os.Build.BRAND+" "+android.os.Build.MODEL;
+//      主界面图片宽度（dp）
+    private static final int PICTURE_SIZE = 136;
 
     //获取用户权限
     public static void verifyStoragePermissions(Activity activity) {
@@ -100,11 +104,17 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+//      获取设备宽度
+        Point outSize = new Point();
+        getWindowManager().getDefaultDisplay().getRealSize(outSize);
+        int x = outSize.x;
+//      根据设备宽度以及图片宽度计算网格布局列数
+        final float scale = MainActivity.this.getResources().getDisplayMetrics().density;
+        int spanCount = (int) (x/(PICTURE_SIZE*scale+0.5f))+1;
 
         //为recyclerView初始化adapter，布局以及设置点击事件监听
         adapter = new ImgAdapter(MainActivity.this, thumbnails);
-        GridLayoutManager manager = new GridLayoutManager(MainActivity.this, 3);
-
+        GridLayoutManager manager = new GridLayoutManager(MainActivity.this,spanCount);
         //点击图片缩略图，进入图片大图Aty
         adapter.setOnItemClickListener(new ImgAdapter.OnItemClickListener() {
             @Override
