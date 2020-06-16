@@ -11,6 +11,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
 import java.net.InetAddress;
+import java.net.MulticastSocket;
 import java.net.SocketTimeoutException;
 import java.nio.charset.Charset;
 import java.util.HashSet;
@@ -50,6 +51,7 @@ public abstract class DeviceSearcher extends Thread {
     private static final byte PACKET_DATA_TYPE_DEVICE_ROOM_21 = 0x21;
 
     private DatagramSocket hostSocket;
+//    private MulticastSocket hostSocket;
     private Set<DeviceBean> mDeviceSet;
 
     private byte mPackType;
@@ -66,6 +68,8 @@ public abstract class DeviceSearcher extends Thread {
         try {
             onSearchStart();
             hostSocket = new DatagramSocket();
+//            hostSocket = new MulticastSocket();
+
             // 设置接收超时时间
             hostSocket.setSoTimeout(RECEIVE_TIME_OUT);
 

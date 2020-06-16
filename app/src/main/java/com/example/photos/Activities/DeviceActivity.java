@@ -205,7 +205,7 @@ public class DeviceActivity extends AppCompatActivity {
             TextView textView = new TextView(DeviceActivity.this);
             textView.setText(deviceBeanList.get(position).getName());
             textView.setTextSize(25);
-            textView.setPadding(10,10,10,0);
+            textView.setPadding(15,20,0,20);
             return textView;
         }
     }

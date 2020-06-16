@@ -5,12 +5,15 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.photos.Activities.MainActivity;
 import com.example.photos.NetWorking.utils.NetworkUtils;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.MulticastSocket;
 import java.net.SocketTimeoutException;
 import java.nio.charset.Charset;
 
@@ -18,7 +21,7 @@ import java.nio.charset.Charset;
  * @author Ticsmyc
  * @date 2020-05-31 22:03
  */
-public abstract class DeviceWaitingSearch extends Thread {
+public abstract class DeviceWaitingSearch implements Runnable {
     private final String TAG = DeviceWaitingSearch.class.getSimpleName();
 
     private static final int DEVICE_FIND_PORT = 9000;
@@ -34,46 +37,39 @@ public abstract class DeviceWaitingSearch extends Thread {
 
     private String deviceName;
     private int port;
-    private Context context; //保存可能需要进行UI交互的上下文环境
+    private MainActivity context; //保存可能需要进行UI交互的上下文环境
     private boolean ifInform;//开启服务时是否通过Toast通知用户,测试环境时尽量开启
 
-    public DeviceWaitingSearch(String name, int receivePort, Context context, boolean ifInform) {
+    public DeviceWaitingSearch(String name, int receivePort, MainActivity context, boolean ifInform) {
         this.deviceName = name;
         this.port = receivePort;
         this.context = context;
         this.ifInform = ifInform;
     }
 
-    public DeviceWaitingSearch(String name, int receivePort, Context context){
+    public DeviceWaitingSearch(String name, int receivePort, MainActivity context){
         this(name, receivePort, context, true);
     }
 
     @Override
     public void run() {
         DatagramSocket socket = null;
+//        MulticastSocket socket = null;
         try {
+//            socket = new MulticastSocket(port);
+//            InetAddress groupAddress = InetAddress.getByName("255.255.255.255");
+//            socket.joinGroup(groupAddress);
+
             socket = new DatagramSocket(port);
+
             byte[] data = new byte[1024];
             DatagramPacket pack = new DatagramPacket(data, data.length);
             while (true) {
 
-                //在主活动中显示服务启动
-                if (context != null && ifInform){
-                    Looper.prepare();//通过子线程调用UI处理方法需要先经过此步骤，具体用法及原因尚待探索
-                    Toast.makeText(context, "局域网响应服务开启:"+getOwnWifiIP(), Toast.LENGTH_LONG).show();
-                    Looper.loop();// 进入loop中的循环，查看消息队列
-                    Log.i(TAG, "run: 局域网服务开启"+getOwnWifiIP());
-                }
-
                 // 等待主机的搜索
                 socket.receive(pack);
-                if (context != null && ifInform){
-                    Looper.prepare();//通过子线程调用UI处理方法需要先经过此步骤，具体用法及原因尚待探索
-                    Toast.makeText(context, "接收到广播报文:", Toast.LENGTH_LONG).show();
-                    Looper.loop();// 进入loop中的循环，查看消息队列
-                }
                 //判断是否是搜索请求
-                if (verifySearchData(pack)) {
+                if (verifySearchData(pack)&&!getOwnWifiIP().equals(pack.getAddress().getHostAddress())) {
                     byte[] sendData = packData();
                     DatagramPacket sendPack = new DatagramPacket(sendData, sendData.length, pack.getAddress(), pack.getPort());
                     System.out.println(TAG+ ": 给主机回复信息");
@@ -85,7 +81,7 @@ public abstract class DeviceWaitingSearch extends Thread {
                         if (verifyCheckData(pack)) {
                             System.out.println(TAG+ ": 确认成功");
                             onDeviceSearched((InetSocketAddress) pack.getSocketAddress());
-                            break;
+//                            break;
                         }
                     } catch (SocketTimeoutException e) {
                     }

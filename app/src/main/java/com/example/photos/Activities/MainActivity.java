@@ -35,6 +35,8 @@ import com.example.photos.R;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 //显示图片缩略图以及recyclerView的主要Aty
@@ -63,6 +65,11 @@ public class MainActivity extends AppCompatActivity {
 
 //    接收广播udp报文设置
     private WifiManager.MulticastLock lock;
+//      线程池
+    private static final int POOL_SIZE = 5;//线程池数量
+    private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(POOL_SIZE);
+
+    private static final String DEVICE_NAME = android.os.Build.BRAND+" "+android.os.Build.MODEL;
 
     //获取用户权限
     public static void verifyStoragePermissions(Activity activity) {
@@ -130,14 +137,15 @@ public class MainActivity extends AppCompatActivity {
         lock.acquire();//在destroy方法中记得释放锁
 
         //创建局域网响应服务线程
-        deviceWaitingFinder = new DeviceWaitingFinder("Tester", DEVICE_RESP_PORT, MainActivity.this);
+        deviceWaitingFinder = new DeviceWaitingFinder(DEVICE_NAME, DEVICE_RESP_PORT, MainActivity.this);
         //服务启动
-        deviceWaitingFinder.start();
+        fixedThreadPool.submit(deviceWaitingFinder);
 
         //创建文件接收服务线程
         tcpReciver = new TcpReciver(RECV_PORT, RECV_FILE_PATH, MainActivity.this);
-        //启动线程(注：暂未确定线程适用策略，没有线程池服务，暂时先直接创建匿名线程开启服务)
-        new Thread(tcpReciver).start();
+        //启动线程
+        fixedThreadPool.submit(tcpReciver);
+
     }
 
     //这里接收ImageActivity结束传回来的参数

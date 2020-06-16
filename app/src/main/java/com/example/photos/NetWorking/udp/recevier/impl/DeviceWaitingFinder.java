@@ -2,6 +2,7 @@ package com.example.photos.NetWorking.udp.recevier.impl;
 
 import android.content.Context;
 
+import com.example.photos.Activities.MainActivity;
 import com.example.photos.NetWorking.udp.recevier.DeviceWaitingSearch;
 
 import java.net.InetSocketAddress;
@@ -13,7 +14,7 @@ import java.net.InetSocketAddress;
 public class DeviceWaitingFinder extends DeviceWaitingSearch {
 
 
-    public DeviceWaitingFinder(String name, int reciverPort, Context context){
+    public DeviceWaitingFinder(String name, int reciverPort, MainActivity context){
         super(name,reciverPort, context);
     }
 
