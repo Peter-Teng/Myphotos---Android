@@ -2,6 +2,7 @@ package com.example.photos.Activities;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -42,6 +43,10 @@ public class DeviceActivity extends AppCompatActivity {
 
     private int imagePos;
 
+    private boolean finding = false;//是否正在搜索设备
+
+    private DeviceFinder deviceFinder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,10 +70,23 @@ public class DeviceActivity extends AppCompatActivity {
         });
 
 //        initBeanList();
-        DeviceFinder deviceFinder = new DeviceFinder(MainActivity.DEVICE_RESP_PORT, DeviceActivity.this);
+        deviceFinder = new DeviceFinder(MainActivity.DEVICE_RESP_PORT, DeviceActivity.this);
         deviceFinder.start();
 //        进度显示
         progress_symbol = findViewById(R.id.finding_symbol);
+
+        final SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.mswipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (!finding){
+                    deviceFinder = new DeviceFinder(MainActivity.DEVICE_RESP_PORT, DeviceActivity.this);
+                    deviceFinder.start();
+                    deviceBeanList.clear();
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            }
+        });
     }
 
     /*
@@ -90,29 +108,9 @@ public class DeviceActivity extends AppCompatActivity {
                         try {
 //                            开启传输
                             TcpSender sender = new TcpSender();
-                            sender.sendFile(path, deviceBeanList.get(pos).getIp(), MainActivity.RECV_PORT);
-//                            显示结果
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(DeviceActivity.this, "传输成功", Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                            sender.sendFile(path, deviceBeanList.get(pos).getIp(), MainActivity.RECV_PORT,DeviceActivity.this);
                         }catch (Exception e){
                             e.printStackTrace();
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(DeviceActivity.this, "传输失败", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }finally {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    finishFinding(true);
-                                }
-                            });
                         }
                     }
                 }).start();
@@ -145,6 +143,7 @@ public class DeviceActivity extends AppCompatActivity {
     public void startFinding(){
         progress_symbol.setVisibility(View.VISIBLE);//显示进度条
         TextView textView = findViewById(R.id.progress_text);
+        finding = true;//正在查找
         textView.setText("搜索设备中...");
         device_list.setVisibility(View.GONE);//列表不可见
     }
@@ -154,6 +153,7 @@ public class DeviceActivity extends AppCompatActivity {
     * */
     public void finishFinding(boolean finded){
         progress_symbol.setVisibility(View.GONE);//进度条不可见
+        finding = false;
         if (finded) {
             device_list.setVisibility(View.VISIBLE);//显示列表
         }else{

@@ -81,10 +81,9 @@ public abstract class DeviceSearcher extends Thread {
             InetAddress broadIP = InetAddress.getByName("255.255.255.255");
             DatagramPacket sendPack = new DatagramPacket(sendData, sendData.length, broadIP, port);
 
-            for (int i = 0; i < 3; i++) {
                 // 发送搜索广播
                 mPackType = PACKET_TYPE_FIND_DEVICE_REQ_10;
-                sendPack.setData(packData(i + 1));
+                sendPack.setData(packData( 1));
                 hostSocket.send(sendPack);
 
                 // 监听来信
@@ -111,7 +110,6 @@ public abstract class DeviceSearcher extends Thread {
                 } catch (SocketTimeoutException e) {
                 }
 //                Log.i(TAG, "结束搜索");
-            }
             onSearchFinish(mDeviceSet);
         } catch (IOException e) {
             e.printStackTrace();
