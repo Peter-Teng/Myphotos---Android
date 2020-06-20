@@ -12,6 +12,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 
 import android.Manifest;
@@ -33,6 +34,7 @@ import com.example.photos.FileUtils;
 import com.example.photos.LoadImgThread;
 import com.example.photos.NetWorking.tcp.receiver.TcpReciver;
 import com.example.photos.NetWorking.udp.recevier.impl.DeviceWaitingFinder;
+import com.example.photos.NetWorking.udp.sender.impl.DeviceFinder;
 import com.example.photos.R;
 
 import java.io.IOException;
@@ -95,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
         //初始化recyclerView
         grids = findViewById(R.id.recyclerView);
-        ArrayList<Bitmap> thumbnails = new ArrayList<>();
+        final ArrayList<Bitmap> thumbnails = new ArrayList<>();
         //开始先load30张图片，免得加载太多造成系统卡顿
         for (int i = 0; i < 30 && i < FileUtils.images.size(); i++) {
             try {
@@ -127,7 +129,6 @@ public class MainActivity extends AppCompatActivity {
         grids.setAdapter(adapter);
         grids.setLayoutManager(manager);
 
-
         //设置滑动事件监听
         grids.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
@@ -156,6 +157,32 @@ public class MainActivity extends AppCompatActivity {
         //启动线程
         fixedThreadPool.submit(tcpReciver);
 
+        //下拉刷新功能实现，当到达顶部时继续下拉则重新从存储卡中获取最新图片
+        final SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.mswipeRefreshLayout_main);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshUI();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
+    //用于主界面刷新UI
+    public void refreshUI(){
+        //清空当前保存的图片，并重新加载
+        FileUtils.images.clear();
+        FileUtils.picture(MainActivity.this.getContentResolver());
+        //清空当前图片列表内容
+        adapter.clear();
+        //重新获取前30张图片
+        for (int i = 0; i < 30 && i < FileUtils.images.size(); i++) {
+            try {
+                adapter.insertBitmap(FileUtils.generateThumbnails(i));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        adapter.notifyDataSetChanged();
     }
 
     //这里接收ImageActivity结束传回来的参数

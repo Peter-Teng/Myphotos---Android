@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.photos.Activities.ImgActivity;
 import com.example.photos.FileUtils;
 import com.example.photos.MyImage;
 
@@ -113,6 +114,7 @@ public class ImageViewPager extends ViewPager implements MyMovingListener
             imageView.setOnMovingListener(ImageViewPager.this);
             imageView.setImageBitmap(bitmap);
             ((ViewPager)container).addView(imageView,0);
+            ImgActivity.matrix = null;
             return imageView;
         }
 

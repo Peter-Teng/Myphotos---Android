@@ -8,25 +8,40 @@
     android:orientation="vertical"
     tools:context=".Activities.TurningActivity">
 
-    <ImageView
-        android:id="@+id/savingDoodle"
-        android:src="@drawable/save"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="350dp"
-        android:layout_width="20dp"
-        android:layout_height="20dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    </ImageView>
+        <ImageView
+            android:id="@+id/savingDoodle"
+            android:src="@drawable/save"
+            android:layout_gravity="right"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"/>
 
-    <com.example.photos.AdaptersAndView.DoodleView
-        android:layout_gravity="center"
-        android:id="@+id/Img_Doodle"
-        android:layout_weight="10"
-        android:scaleType="matrix"
+    </LinearLayout>
+
+
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </com.example.photos.AdaptersAndView.DoodleView>
+        android:orientation="horizontal"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:background="#000000">
+        <com.example.photos.AdaptersAndView.DoodleView
+            android:layout_gravity="center_vertical"
+            android:background="#ffffff"
+            android:id="@+id/Img_Doodle"
+            android:layout_weight="10"
+            android:scaleType="matrix"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </com.example.photos.AdaptersAndView.DoodleView>
+    </LinearLayout>
 
 
 

@@ -39,7 +39,12 @@ public class DoodleActivity extends AppCompatActivity {
         mainImg = findViewById(R.id.Img_Doodle);
         //加载图片
         pic = BitmapFactory.decodeFile(FileUtils.images.get(index).getPath());
+
         mainImg.setImageBitmap(pic);
+        mainImg.setScaleType(ImageView.ScaleType.MATRIX);
+        if (ImgActivity.matrix != null) {
+            mainImg.setImageMatrix(ImgActivity.matrix);
+        }
         mainImg.init(pic);
 
         //为save图片“按钮”添加点击事件监听，保存图片

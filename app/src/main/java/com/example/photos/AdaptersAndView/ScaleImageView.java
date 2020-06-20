@@ -101,11 +101,11 @@ public class ScaleImageView extends androidx.appcompat.widget.AppCompatImageView
         setOnTouchListener(mListener);
         gestureDetector = new GestureDetector(getContext(), new GestureListener(mListener));
         //隐藏或者显示底部工具栏
-        if(tools.getVisibility()==VISIBLE)
-            setBackgroundColor(Color.WHITE);
-        else
-            setBackgroundColor(Color.BLACK);
-        setScaleType(ScaleType.FIT_CENTER);
+//        if(tools.getVisibility()==VISIBLE)
+//            setBackgroundColor(Color.WHITE);
+//        else
+//            setBackgroundColor(Color.BLACK);
+//        setScaleType(ScaleType.FIT_CENTER);
     }
 
     //放大拖动相关，告诉ImageViewPager不要给我滑到下一张图片了
@@ -159,7 +159,7 @@ public class ScaleImageView extends androidx.appcompat.widget.AppCompatImageView
                     break;
                 case MotionEvent.ACTION_UP://手指抬起
                     exitAty(event);//计算用户是否为上下大幅度滑动，若是则调用该函数退出大图
-                    toolsDeal();//隐藏或者显示工具栏
+//                    toolsDeal();//隐藏或者显示工具栏
                 case MotionEvent.ACTION_CANCEL://按下退出键
                     reSetMatrix();//图片恢复原来大小
                     stopDrag();
@@ -285,6 +285,7 @@ public class ScaleImageView extends androidx.appcompat.widget.AppCompatImageView
 
                     currentMatrix.postTranslate(dx, dy);
                     setImageMatrix(currentMatrix);
+                    ImgActivity.matrix = currentMatrix;
                 }
             }else {
                 stopDrag();

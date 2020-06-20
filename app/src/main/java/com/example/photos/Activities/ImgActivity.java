@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -27,6 +29,8 @@ import java.util.Date;
 
 //查看大图页面的Activity
 public class ImgActivity extends AppCompatActivity {
+
+    public static Matrix matrix;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

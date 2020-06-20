@@ -37,6 +37,9 @@ public class ImgAdapter extends RecyclerView.Adapter<ImgAdapter.myViewHolder>
     //删除图片
     public void deleteBitmap(int pos) {imgs.remove(pos);}
 
+    //清空相册，用于刷新操作
+    public void clear() {imgs.clear();}
+
     private OnItemClickListener listener;
 
     public void setOnItemClickListener(OnItemClickListener listener) {

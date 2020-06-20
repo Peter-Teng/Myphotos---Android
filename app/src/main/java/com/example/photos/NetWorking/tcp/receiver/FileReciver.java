@@ -2,12 +2,19 @@ package com.example.photos.NetWorking.tcp.receiver;
 
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.widget.Toast;
+
+import com.example.photos.Activities.MainActivity;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -78,7 +85,7 @@ public class FileReciver implements Runnable{
              */
             byte[] data = new byte[len1];
             in.read(data);
-            String fileName = new String(data);
+            final String fileName = new String(data);
 
             // 获取文件内容字节长度
             String line2 = "";
@@ -91,7 +98,8 @@ public class FileReciver implements Runnable{
             int len2 = Integer.parseInt(line2.substring(0, line2.length() - 2));
             System.out.println("文件长度"+len2);
             // 创建输文件出流，指定文件输出地址
-            out = new FileOutputStream(fileStorePath+fileName);
+            final String path = fileStorePath+System.currentTimeMillis()+".JPEG";
+            out = new FileOutputStream(path);
             dis = new DataInputStream(in);
             dos = new DataOutputStream(out);
             // 获取文件内容字节
@@ -105,12 +113,22 @@ public class FileReciver implements Runnable{
             dos.flush();
 //            展示读取结果
             if (ifInform) {
-                Looper.prepare();
-                Toast.makeText(context, "接收到图片" + fileName + "并保存到" + fileStorePath,
-                        Toast.LENGTH_SHORT).show();
-                Looper.loop();
+                context = (MainActivity)context;
+                ((MainActivity) context).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(context, "接收到图片" + fileName + "并保存到" + fileStorePath,
+                                Toast.LENGTH_SHORT).show();
+
+                        //这个广播的目的就是更新图库，发了这个广播进入相册就可以找到你保存的图片了！，记得要传你更新的file哦
+                        ContentValues values = new ContentValues();
+                        values.put(MediaStore.Images.Media.DATA, path);
+                        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+                        context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(path)));
+                    }
+                });
             }
-            System.out.println("接受到来自"+socket.getInetAddress().getHostAddress()+"的文件,存放于："+fileStorePath+fileName);
 
         } catch (IOException e) {
             e.printStackTrace();

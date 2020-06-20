@@ -8,10 +8,12 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
+import com.example.photos.Activities.ImgActivity;
 import com.example.photos.FileUtils;
 
 //自定义的View，用于给图片涂鸦，继承自ImageView
@@ -81,9 +83,11 @@ public class DoodleView extends androidx.appcompat.widget.AppCompatImageView
         return true;
     }
 
+
     //保存图片
     public boolean save(Context ctx)
     {
         return FileUtils.saveBitmap(ctx,cacheBitmap);
     }
+
 }
