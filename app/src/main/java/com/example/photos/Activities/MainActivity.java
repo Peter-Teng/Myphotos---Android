@@ -2,7 +2,7 @@ package com.example.photos.Activities;
 
 
 /**
- * @author DHP
+ * @author DHP SJX
  *
  */
 import androidx.annotation.Nullable;
